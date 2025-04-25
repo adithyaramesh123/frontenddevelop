@@ -4,7 +4,7 @@ import React from 'react'
 const Product = () => {
   return (
     <div>
-      <Grid container spacing={2}>
+      {/* <Grid container spacing={2}>
         {data.map((val,i)=>{
             return(
                 <Grid size={{xs:4,md:3}}>
@@ -34,7 +34,7 @@ const Product = () => {
             
         })}
 
-      </Grid>
+      </Grid> */}
     </div>
   )
 }
