@@ -79,11 +79,13 @@ import Product from './Product';
 import axios from 'axios';
 
 const Admin = () => {
+  var base_url=import.meta.env.VITE_API_BASE_URL
   const [input, setForm] = useState({
     pName: '',
     price: '',
     description: '',
     stock: '',
+    images:[],
     available: false
   });
 
@@ -99,14 +101,21 @@ const Admin = () => {
   const submitHandler = () => {
     console.log('Product Data:', input);
     const formData =new FormData();
-    formData.append("pName",ProductData,pName)
-    formData.append("price",ProductData,price)
-    formData.append("description",ProductData,description)
-    formData.append("stock",ProductData,stock)
-    ProductData.images.forEach((file)=>{
+    formData.append("pName.input",input.pName)
+    formData.append("price.input",input.price)
+    formData.append("description.input",input.description)
+    formData.append("stock.input",input.stock)
+    input.images.forEach((file)=>{
       formData.append("images",file)
     })
-    axios.post(`${base_url}`,formData)
+    axios.post(`${base_url}/p`,formData)
+    .then ((res)=>{
+      console.log(res)
+      alert(res.data.message)
+    })
+    .catch ((err)=>{
+console.log(err)
+    })
     // Here, you can add the logic for submitting data (e.g., API call)
   };
 
@@ -186,7 +195,7 @@ const Admin = () => {
         multiple
         accept='image/*'
         onChange={(e)=>{
-          setProductData({...ProductData,images:Array.from(e.target.files)})
+          setForm({...setForm,images:Array.from(e.target.files)})
         }}/>
         
       </Button>
