@@ -8,6 +8,7 @@ import { Route, Routes } from 'react-router-dom'
 import Admin from './component/Admin'
 import Name from './component/Name'
 import Product from './component/Product'
+import Productdetails from './component/Productdetails'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -21,6 +22,7 @@ function App() {
         <Route path ='/sign' element={<Signup/>}/>
         <Route path='/admin' element={<Name child={<Admin/>}/>}/>
         <Route path='/p' element={<Name child={<Product/>}/>}/>
+        <Route path='/d' element ={<Name child={<Productdetails/>}/>}/>
       </Routes>
     </>
   )

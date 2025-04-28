@@ -1,11 +1,26 @@
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@mui/material'
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { data } from 'react-router-dom';
 
 const Product = () => {
+var [Product,setProduct]=useState([]);
+var base_url=import.meta.env.VITE_API_BASE_URL
+
+useEffect(()=>{
+  axios.get(`${base_url}/p`)
+  .then ((res)=>{
+    setProduct(res.data)
+    console.log(res)
+  })
+  .catch((err)=>{
+    console.log(err)
+  })
+})
   return (
     <div>
-      {/* <Grid container spacing={2}>
-        {data.map((val,i)=>{
+      <Grid container spacing={2}>
+        {Product.map((val,i)=>{
             return(
                 <Grid size={{xs:4,md:3}}>
                   <Card sx={{ maxWidth: 345 }}>
@@ -13,16 +28,14 @@ const Product = () => {
         <CardMedia
           component="img"
           height="140"
-          image={val.image}
-          alt="green iguana"
+          image={`${base_url}/uploads/${val.images[0]}`}
+         
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-           {val.title}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-           {val.price}
-          </Typography>
+          <Typography>{val.pName}</Typography>
+          <Typography>{val.price}</Typography>
+          <Typography>{val.description}</Typography>
+          <Typography>{val.stock}</Typography>
         </CardContent>
       </CardActionArea>
     </Card>  
@@ -34,7 +47,7 @@ const Product = () => {
             
         })}
 
-      </Grid> */}
+      </Grid>
     </div>
   )
 }

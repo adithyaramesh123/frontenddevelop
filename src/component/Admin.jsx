@@ -230,10 +230,14 @@ import {
   Typography,
 } from '@mui/material';
 import axios from 'axios';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Admin = () => {
+  var location=useLocation();
+  var baseurl=import.meta.env.VITE_API_BASE_URL;
+  var navigate=useNavigate();
+  
   const [input, setProductdata] = useState({
     pName: '',
     price: '',
@@ -241,8 +245,18 @@ const Admin = () => {
     stock: '',
     image :[]
   });
-  var baseurl=import.meta.env.VITE_API_BASE_URL;
-  var navigate=useNavigate();
+useEffect(()=>{
+  const {pro}=location.state;
+  if(location.state !==null){
+  setProductdata({
+    pName:pro.pName||"",
+    price:pro.price||"",
+    stock:pro.stock||"",
+    description:pro.description||"",
+    images:[]
+  })
+}},[location.state])
+  
 
   const inputHandler = (e) => {
     setProductdata({...input,[e.target.name]:e.target.value})
@@ -267,7 +281,15 @@ const submithandler = (e) => {
     formData.append('images', file);
   });
 
-  axios
+  if(location.state!==null){
+    var id=location.state.pro._id
+    axios.put(`${base_url}/p/${id}`,formData)
+    .then ((res)=>{
+      alert(res.data.message)
+      navigate('/p')
+    })
+  }else{
+    axios
     .post(`${baseurl}/p`, formData)
     .then((res) => {
       console.log(res.data);
@@ -276,8 +298,17 @@ const submithandler = (e) => {
     .catch((err) => {
       console.log(err);  
     });
+  }
 };
+
   return (
+    <div style={{margin:30}}>
+      <Button variant='contained'>
+        
+        <Link to="/d"style={{textDecoration:"none",color:"white"}}> Product Details</Link>
+      </Button>
+      
+    
     <Box
       sx={{
         maxWidth: 500,
@@ -300,6 +331,7 @@ const submithandler = (e) => {
           variant='outlined'
           margin='normal'
           name='pName'
+       
           value={input.pName}
           onChange={inputHandler}
           required
@@ -377,6 +409,7 @@ const submithandler = (e) => {
         </Button>
       </form>
     </Box>
+    </div>
   )
 }
 
